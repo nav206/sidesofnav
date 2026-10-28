@@ -1,0 +1,167 @@
+.cube-stage {
+	--cube-depth: min(32vw, 16rem);
+	width: 100%;
+}
+
+.cube-stage__scene {
+	perspective: 1200px;
+	perspective-origin: 50% 50%;
+}
+
+.cube-stage__cube {
+	position: relative;
+	width: 100%;
+	min-height: 20rem;
+	transform-style: preserve-3d;
+	/* Pull the cube back so the front face sits at z≈0 (no perspective zoom). */
+	transform: translateZ(calc(-1 * var(--cube-depth)));
+	will-change: transform;
+}
+
+.cube-stage__face {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	flex-direction: column;
+	box-sizing: border-box;
+	width: 100%;
+	height: 100%;
+	padding: 0;
+	background: transparent;
+	backface-visibility: hidden;
+	-webkit-backface-visibility: hidden;
+	overflow: auto;
+	pointer-events: none;
+}
+
+.cube-stage__face.is-active {
+	position: relative;
+	inset: auto;
+	height: auto;
+	min-height: 20rem;
+	z-index: 1;
+	pointer-events: auto;
+	overflow: visible;
+}
+
+.cube-stage__placeholder {
+	display: grid;
+	place-items: center;
+	height: 100%;
+	min-height: 20rem;
+	padding: 1.5rem;
+	border: 1px solid rgb(229 229 229);
+	background: rgb(250 250 250);
+	opacity: 0.4;
+}
+
+.cube-stage__placeholder-label {
+	margin: 0;
+	font-size: 0.95rem;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	color: rgb(115 115 115);
+}
+
+.cube-stage__content {
+	width: 100%;
+}
+
+/* Flat mode — JS class, mobile, or reduced motion: opacity cross-fade, no 3D */
+@media (max-width: 767px) {
+	.cube-stage {
+		--cube-depth: 0px;
+	}
+}
+
+@media (max-width: 767px), (prefers-reduced-motion: reduce) {
+	.cube-stage__scene {
+		perspective: none;
+	}
+
+	.cube-stage__cube {
+		transform: none !important;
+		transition: none !important;
+		min-height: 0;
+		transform-style: flat;
+		will-change: auto;
+	}
+
+	.cube-stage__face {
+		position: absolute;
+		inset: 0;
+		opacity: 0;
+		transform: none !important;
+		pointer-events: none;
+		transition: none;
+		backface-visibility: visible;
+		height: auto;
+		min-height: 0;
+	}
+
+	.cube-stage[data-animate='true'] .cube-stage__face.is-active {
+		transition: opacity 400ms ease;
+	}
+
+	.cube-stage__face.is-active {
+		position: relative;
+		inset: auto;
+		opacity: 0;
+		pointer-events: auto;
+		min-height: 0;
+		overflow: visible;
+	}
+
+	.cube-stage[data-fade='in'] .cube-stage__face.is-active {
+		opacity: 1;
+	}
+
+	.cube-stage__placeholder {
+		display: none;
+	}
+}
+
+.cube-stage--flat .cube-stage__scene {
+	perspective: none;
+}
+
+.cube-stage--flat .cube-stage__cube {
+	transform: none !important;
+	transition: none !important;
+	min-height: 0;
+	transform-style: flat;
+	will-change: auto;
+}
+
+.cube-stage--flat .cube-stage__face {
+	position: absolute;
+	inset: 0;
+	opacity: 0;
+	transform: none !important;
+	pointer-events: none;
+	transition: none;
+	backface-visibility: visible;
+	height: auto;
+	min-height: 0;
+}
+
+.cube-stage--flat[data-animate='true'] .cube-stage__face.is-active {
+	transition: opacity 400ms ease;
+}
+
+.cube-stage--flat .cube-stage__face.is-active {
+	position: relative;
+	inset: auto;
+	opacity: 0;
+	pointer-events: auto;
+	min-height: 0;
+	overflow: visible;
+}
+
+.cube-stage--flat[data-fade='in'] .cube-stage__face.is-active {
+	opacity: 1;
+}
+
+.cube-stage--flat .cube-stage__placeholder {
+	display: none;
+}

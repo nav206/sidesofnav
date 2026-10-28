@@ -1,5 +1,9 @@
 ---
+import { ClientRouter } from 'astro:transitions';
+import CubeStage from '../components/CubeStage';
+import { FACES, isFacePath } from '../lib/faces';
 import '../styles/global.css';
+import '../styles/cube.css';
 
 interface Props {
 	title: string;
@@ -8,18 +12,6 @@ interface Props {
 
 const { title, faceTitle } = Astro.props;
 const pathname = Astro.url.pathname;
-
-const faces = [
-	{ href: '/', label: 'The Core' },
-	{ href: '/projects', label: 'The Analyst & Builder' },
-	{ href: '/creative', label: 'The Observer & Writer' },
-	{ href: '/community', label: 'The Human & Community' },
-] as const;
-
-function isActive(href: string): boolean {
-	if (href === '/') return pathname === '/';
-	return pathname === href || pathname.startsWith(`${href}/`);
-}
 ---
 
 <!doctype html>
@@ -31,31 +23,44 @@ function isActive(href: string): boolean {
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
+		<ClientRouter fallback="swap" />
 	</head>
 	<body class="min-h-dvh bg-neutral-50 text-neutral-900 antialiased">
-		<header class="border-b border-neutral-200">
+		<header class="relative z-20 border-b border-neutral-200 bg-neutral-50">
 			<nav class="mx-auto flex max-w-5xl flex-wrap items-center gap-x-6 gap-y-2 px-4 py-4" aria-label="Cube faces">
 				{
-					faces.map((face) => (
+					FACES.map((face) => (
 						<a
-							href={face.href}
-							aria-current={isActive(face.href) ? 'page' : undefined}
+							href={face.path}
+							aria-current={isFacePath(pathname, face.path) ? 'page' : undefined}
 							class:list={[
 								'text-sm tracking-wide transition-colors',
-								isActive(face.href)
+								isFacePath(pathname, face.path)
 									? 'font-semibold text-neutral-900'
 									: 'text-neutral-500 hover:text-neutral-800',
 							]}
 						>
-							{face.label}
+							{face.navLabel}
 						</a>
 					))
 				}
 			</nav>
 		</header>
-		<main class="mx-auto max-w-5xl px-4 py-12">
-			<h1 class="text-3xl font-semibold tracking-tight">{faceTitle}</h1>
-			<slot />
+		<main class="mx-auto max-w-5xl px-4 py-12" transition:animate="none">
+			<CubeStage client:load pathname={pathname} faceTitle={faceTitle}>
+				<slot />
+			</CubeStage>
 		</main>
+		<script>
+			// Flag in-app navigations so CubeStage can animate from the prior face
+			// instead of spinning in on deep links / hard loads.
+			document.addEventListener('astro:before-preparation', () => {
+				try {
+					sessionStorage.setItem('cube-nav', '1');
+				} catch {
+					/* private mode */
+				}
+			});
+		</script>
 	</body>
 </html>
