@@ -1,0 +1,61 @@
+---
+import '../styles/global.css';
+
+interface Props {
+	title: string;
+	faceTitle: string;
+}
+
+const { title, faceTitle } = Astro.props;
+const pathname = Astro.url.pathname;
+
+const faces = [
+	{ href: '/', label: 'The Core' },
+	{ href: '/projects', label: 'The Analyst & Builder' },
+	{ href: '/creative', label: 'The Observer & Writer' },
+	{ href: '/community', label: 'The Human & Community' },
+] as const;
+
+function isActive(href: string): boolean {
+	if (href === '/') return pathname === '/';
+	return pathname === href || pathname.startsWith(`${href}/`);
+}
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+	</head>
+	<body class="min-h-dvh bg-neutral-50 text-neutral-900 antialiased">
+		<header class="border-b border-neutral-200">
+			<nav class="mx-auto flex max-w-5xl flex-wrap items-center gap-x-6 gap-y-2 px-4 py-4" aria-label="Cube faces">
+				{
+					faces.map((face) => (
+						<a
+							href={face.href}
+							aria-current={isActive(face.href) ? 'page' : undefined}
+							class:list={[
+								'text-sm tracking-wide transition-colors',
+								isActive(face.href)
+									? 'font-semibold text-neutral-900'
+									: 'text-neutral-500 hover:text-neutral-800',
+							]}
+						>
+							{face.label}
+						</a>
+					))
+				}
+			</nav>
+		</header>
+		<main class="mx-auto max-w-5xl px-4 py-12">
+			<h1 class="text-3xl font-semibold tracking-tight">{faceTitle}</h1>
+			<slot />
+		</main>
+	</body>
+</html>

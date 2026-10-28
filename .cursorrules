@@ -1,0 +1,8 @@
+- Framework: Astro (SSG), Tailwind CSS, React.
+- Code Style: Write minimal, modern, idiomatic TypeScript.
+- Anti-Slop Rules:
+  - Do NOT write placeholder text, filler comments, or excessive docstrings.
+  - Do NOT over-engineer abstract components before they are needed.
+  - Do NOT introduce extra dependencies without explicit approval.
+  - Keep Tailwind classes readable; do not duplicate utility styles.
+  - When editing files, modify only the relevant lines rather than rewriting the entire file unnecessarily.
