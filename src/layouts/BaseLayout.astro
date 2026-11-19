@@ -2,6 +2,7 @@
 import { ClientRouter } from 'astro:transitions';
 import CubeStage from '../components/CubeStage';
 import { FACES, isFacePath } from '../lib/faces';
+import { site } from '../lib/site';
 import '../styles/global.css';
 import '../styles/cube.css';
 
@@ -22,12 +23,21 @@ const pathname = Astro.url.pathname;
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
+		<meta name="description" content={`${site.shortName} — ${site.tagline}`} />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600&family=Fraunces:opsz,wght@9..144,500;9..144,650&display=swap"
+			rel="stylesheet"
+		/>
 		<title>{title}</title>
 		<ClientRouter fallback="swap" />
 	</head>
-	<body class="min-h-dvh bg-neutral-50 text-neutral-900 antialiased">
-		<header class="relative z-20 border-b border-neutral-200 bg-neutral-50">
+	<body class="min-h-dvh text-[var(--ink)] antialiased">
+		<header class="relative z-20 border-b border-[var(--line)]/80 bg-[var(--surface)]/70 backdrop-blur-sm">
 			<nav class="mx-auto flex max-w-5xl flex-wrap items-center gap-x-6 gap-y-2 px-4 py-4" aria-label="Cube faces">
+				<a href="/" class="font-display text-lg tracking-tight text-[var(--ink)]">{site.name}</a>
+				<span class="hidden h-4 w-px bg-[var(--line)] sm:block" aria-hidden="true"></span>
 				{
 					FACES.map((face) => (
 						<a
@@ -36,8 +46,8 @@ const pathname = Astro.url.pathname;
 							class:list={[
 								'text-sm tracking-wide transition-colors',
 								isFacePath(pathname, face.path)
-									? 'font-semibold text-neutral-900'
-									: 'text-neutral-500 hover:text-neutral-800',
+									? 'font-semibold text-[var(--ink)]'
+									: 'text-[var(--muted)] hover:text-[var(--ink)]',
 							]}
 						>
 							{face.navLabel}
@@ -52,8 +62,6 @@ const pathname = Astro.url.pathname;
 			</CubeStage>
 		</main>
 		<script>
-			// Flag in-app navigations so CubeStage can animate from the prior face
-			// instead of spinning in on deep links / hard loads.
 			document.addEventListener('astro:before-preparation', () => {
 				try {
 					sessionStorage.setItem('cube-nav', '1');

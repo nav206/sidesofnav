@@ -205,7 +205,9 @@ export default function CubeStage({ pathname, faceTitle, children }: CubeStagePr
 							>
 								{active ? (
 									<div className="cube-stage__content">
-										<h1 className="text-3xl font-semibold tracking-tight">{faceTitle}</h1>
+										<h1 className="font-display text-3xl font-medium tracking-tight text-[var(--ink)] sm:text-4xl">
+											{faceTitle}
+										</h1>
 										{children}
 									</div>
 								) : (

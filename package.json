@@ -5,12 +5,13 @@
   "engines": {
     "node": ">=22.23.4"
   },
-  "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
-    "astro": "astro"
-  },
+	"scripts": {
+		"dev": "astro dev",
+		"build": "astro build",
+		"preview": "astro preview",
+		"astro": "astro",
+		"deploy": "npm run build && node scripts/deploy-pages.mjs"
+	},
   "dependencies": {
     "@astrojs/cloudflare": "^14.4.2",
     "@astrojs/react": "^7.1.1",

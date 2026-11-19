@@ -1,0 +1,100 @@
+---
+import type { Project } from '../lib/projects';
+import { STATUS_LABEL } from '../lib/projects';
+
+interface Props {
+	project: Project;
+}
+
+const { project } = Astro.props;
+---
+
+<div class="mt-2 space-y-8">
+	<p class="text-sm uppercase tracking-[0.14em] text-[var(--muted)]">
+		<a href="/projects" class="hover:text-[var(--ink)]">Projects</a>
+		<span class="mx-2 opacity-40">/</span>
+		<span>{STATUS_LABEL[project.status]}</span>
+	</p>
+
+	<p class="max-w-2xl text-lg leading-relaxed text-[var(--ink-soft)]">{project.oneLiner}</p>
+
+	<section class="space-y-2">
+		<h2 class="text-sm font-medium uppercase tracking-[0.12em] text-[var(--muted)]">Backstory</h2>
+		<p class="max-w-2xl leading-relaxed text-[var(--ink-soft)]">{project.backstory}</p>
+	</section>
+
+	<section class="space-y-3">
+		<h2 class="text-sm font-medium uppercase tracking-[0.12em] text-[var(--muted)]">Video</h2>
+		{
+			project.videoUrl ? (
+				<div class="aspect-video w-full max-w-2xl overflow-hidden border border-[var(--line)] bg-[var(--surface-2)]">
+					<iframe
+						src={project.videoUrl}
+						title={`${project.title} video`}
+						class="h-full w-full"
+						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+						allowfullscreen
+					/>
+				</div>
+			) : (
+				<div class="flex aspect-video w-full max-w-2xl items-center justify-center border border-dashed border-[var(--line)] bg-[var(--surface-2)]/60">
+					<p class="text-sm text-[var(--muted)]">Video embed — filming soon</p>
+				</div>
+			)
+		}
+	</section>
+
+	<section class="space-y-3">
+		<h2 class="text-sm font-medium uppercase tracking-[0.12em] text-[var(--muted)]">Try it</h2>
+		{
+			project.demoUrl ? (
+				<a
+					href={project.demoUrl}
+					target="_blank"
+					rel="noopener noreferrer"
+					class="inline-flex text-[var(--accent)] underline-offset-4 hover:underline"
+				>
+					Open live demo
+				</a>
+			) : (
+				<p class="text-sm text-[var(--muted)]">
+					Interactive layer ships with the public demo link
+					{project.status === 'live' ? ' (URL to confirm).' : '.'}
+				</p>
+			)
+		}
+	</section>
+
+	{
+		project.links.length > 0 && (
+			<section class="space-y-3">
+				<h2 class="text-sm font-medium uppercase tracking-[0.12em] text-[var(--muted)]">Links</h2>
+				<ul class="space-y-1">
+					{project.links.map((link) => (
+						<li>
+							<a
+								href={link.href}
+								target="_blank"
+								rel="noopener noreferrer"
+								class="text-[var(--accent)] underline-offset-4 hover:underline"
+							>
+								{link.label}
+							</a>
+						</li>
+					))}
+				</ul>
+			</section>
+		)
+	}
+
+	{
+		project.skills && project.skills.length > 0 && (
+			<section class="space-y-2 border-t border-[var(--line)] pt-6">
+				<h2 class="text-sm font-medium uppercase tracking-[0.12em] text-[var(--muted)]">
+					Context
+				</h2>
+				<p class="text-sm text-[var(--muted)]">{project.skills.join(' · ')}</p>
+			</section>
+		)
+	}
+</div>

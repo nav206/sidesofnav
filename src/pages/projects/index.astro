@@ -1,7 +1,35 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getProjectsSorted, STATUS_LABEL } from '../../lib/projects';
+import { site } from '../../lib/site';
+
+const list = getProjectsSorted();
 ---
 
-<BaseLayout title="Sides of Nav — The Analyst & Builder" faceTitle="The Analyst & Builder">
-	<p class="mt-3 text-neutral-600">Technical & Data Projects</p>
+<BaseLayout title={`${site.name} — Projects`} faceTitle="The Analyst & Builder">
+	<div class="mt-4 space-y-8">
+		<p class="max-w-2xl text-[var(--ink-soft)]">
+			Pipeline of work with artifacts — live demos first, then builds in motion.
+		</p>
+
+		<ul class="divide-y divide-[var(--line)] border-y border-[var(--line)]">
+			{
+				list.map((project) => (
+					<li class="py-5">
+						<a href={`/projects/${project.slug}`} class="group block space-y-2">
+							<div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+								<span class="font-display text-xl tracking-tight text-[var(--ink)] group-hover:text-[var(--accent)]">
+									{project.title}
+								</span>
+								<span class="text-xs uppercase tracking-[0.14em] text-[var(--muted)]">
+									{STATUS_LABEL[project.status]}
+								</span>
+							</div>
+							<p class="max-w-2xl text-[var(--ink-soft)]">{project.oneLiner}</p>
+						</a>
+					</li>
+				))
+			}
+		</ul>
+	</div>
 </BaseLayout>

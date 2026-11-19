@@ -1,0 +1,13 @@
+---
+import ProjectDetail from '../../components/ProjectDetail.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getProjectBySlug } from '../../lib/projects';
+import { site } from '../../lib/site';
+
+const project = getProjectBySlug('zenna-the-zinnia');
+if (!project) throw new Error('Missing zenna-the-zinnia project');
+---
+
+<BaseLayout title={`${site.name} — ${project.title}`} faceTitle={project.title}>
+	<ProjectDetail project={project} />
+</BaseLayout>
