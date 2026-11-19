@@ -36,10 +36,13 @@ export const projects: readonly Project[] = [
 		backstory:
 			'Causal research often stalls at idea generation: weeks scanning news and briefs for natural experiments that never reach a draft. Causal Hub turns that scouting into a searchable, constraint-aware workflow.',
 		status: 'live',
-		// Confirm the canonical public URL (LinkedIn shortlink was used at launch).
-		demoUrl: undefined,
+		demoUrl: 'https://causal-hub.vercel.app/explore',
 		videoUrl: undefined,
 		links: [
+			{
+				label: 'Open Causal Hub',
+				href: 'https://causal-hub.vercel.app/explore',
+			},
 			{
 				label: 'Launch note',
 				href: 'https://www.linkedin.com/posts/navneet-in2026_create-next-app-activity-7416510564027400193-CzFx',
@@ -63,11 +66,17 @@ export const projects: readonly Project[] = [
 	{
 		slug: 'zenna-the-zinnia',
 		title: 'Zenna, the Zinnia',
-		oneLiner: 'Interactive scrollytelling piece — artifact landing this month.',
+		oneLiner: 'Interactive scrollytelling piece around growth and observation.',
 		backstory:
-			'A narrative build around growth and observation; page ships when the interactive artifact is ready to show.',
-		status: 'building',
-		links: [],
+			'A narrative build around growth and observation — now live as an interactive artifact.',
+		status: 'live',
+		demoUrl: 'https://zenna-the-zinnia.vercel.app/',
+		links: [
+			{
+				label: 'Open Zenna',
+				href: 'https://zenna-the-zinnia.vercel.app/',
+			},
+		],
 		order: 3,
 	},
 	{

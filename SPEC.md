@@ -58,9 +58,9 @@ src/pages/
 ├── index.astro                      --> / (The Core)
 ├── projects/
 │   ├── index.astro                  --> /projects
-│   ├── causal-hub.astro             --> /projects/causal-hub (live)
+│   ├── causal-hub.astro             --> /projects/causal-hub (live — causal-hub.vercel.app/explore)
 │   ├── lanesight.astro              --> /projects/lanesight (building)
-│   ├── zenna-the-zinnia.astro       --> /projects/zenna-the-zinnia (building)
+│   ├── zenna-the-zinnia.astro       --> /projects/zenna-the-zinnia (live — zenna-the-zinnia.vercel.app)
 │   └── sf-almanac.astro             --> /projects/sf-almanac (building)
 ├── creative/
 │   └── index.astro                  --> /creative

@@ -38,6 +38,8 @@ async function run() {
 					'deploy',
 					'dist/client',
 					'--project-name=sidesofnav',
+					// Always update production URL (sidesofnav.pages.dev), not a preview alias.
+					'--branch=master',
 					'--commit-dirty=true',
 				],
 				{ stdio: 'inherit', shell: true, cwd: root },
