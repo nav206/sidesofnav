@@ -12,6 +12,7 @@ export const contacts = {
 	email: 'navneet.singh@uni.minerva.edu',
 	linkedin: 'https://www.linkedin.com/in/navneet-in2026/',
 	github: 'https://github.com/nav206/',
+	buyMeACoffee: 'https://buymeacoffee.com/nav206',
 	/** Set once the master resume PDF is redone and placed in /public. */
 	resumeUrl: null as string | null,
 	/** Writing home — Substack / site TBD. */
