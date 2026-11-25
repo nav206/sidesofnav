@@ -1,0 +1,10 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "sidesofnav",
+	"compatibility_date": "2026-10-19",
+	// Static Astro HTML/CSS/JS (Cloudflare adapter output).
+	"assets": {
+		"directory": "./dist/client",
+		"not_found_handling": "404-page"
+	}
+}

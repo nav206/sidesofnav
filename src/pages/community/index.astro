@@ -1,7 +1,13 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { site } from '../../lib/site';
 ---
 
-<BaseLayout title="Sides of Nav — The Human & Community" faceTitle="The Human & Community">
-	<p class="mt-3 text-neutral-600">Volunteering, Fundraisers, Network Spotlight</p>
+<BaseLayout title={`${site.name} — Community`} faceTitle="The Human & Community">
+	<div class="mt-4 space-y-6">
+		<p class="max-w-2xl text-[var(--ink-soft)]">
+			Three fundraisers — cause, what happened, proof. Stories land next.
+		</p>
+		<p class="text-sm text-[var(--muted)]">Placeholder until campaign details are locked.</p>
+	</div>
 </BaseLayout>

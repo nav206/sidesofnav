@@ -1,7 +1,133 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { cities } from '../lib/cities';
+import { FACES } from '../lib/faces';
+import { primaryContactLinks, site } from '../lib/site';
+
+const faceLinks = FACES.filter((f) => f.id !== 'core');
 ---
 
-<BaseLayout title="Sides of Nav — The Core" faceTitle="The Core">
-	<p class="mt-3 text-neutral-600">Landing + Bio / Quick Resume</p>
+<BaseLayout title={`${site.name} — The Core`} faceTitle={site.name}>
+	<div class="mt-4 space-y-12">
+		<section class="space-y-4">
+			<p class="text-sm uppercase tracking-[0.14em] text-[var(--muted)]">The Core</p>
+			<p class="max-w-xl text-lg text-[var(--ink-soft)]">{site.tagline}</p>
+			<p class="max-w-xl text-[var(--ink-soft)]">
+				{site.shortName}. Minerva B.S. Computational Sciences & Social Sciences. Based in San
+				Francisco — built across six cities.
+			</p>
+		</section>
+
+		<section class="space-y-4" aria-label="Cities lived">
+			<h2 class="text-sm font-medium uppercase tracking-[0.14em] text-[var(--muted)]">
+				Six cities
+			</h2>
+			<ul class="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-6">
+				{
+					cities.map((city) => (
+						<li class="city-placeholder flex flex-col items-center gap-2 py-3 text-center">
+							<span
+								class="city-placeholder__mark"
+								data-city={city.id}
+								aria-hidden="true"
+							/>
+							<span class="text-sm font-medium text-[var(--ink)]">{city.name}</span>
+							<span class="text-xs uppercase tracking-wider text-[var(--muted)]">
+								{city.country}
+							</span>
+						</li>
+					))
+				}
+			</ul>
+		</section>
+
+		<section class="space-y-3">
+			<h2 class="text-sm font-medium uppercase tracking-[0.14em] text-[var(--muted)]">
+				Explore the cube
+			</h2>
+			<ul class="flex flex-wrap gap-x-6 gap-y-2">
+				{
+					faceLinks.map((face) => (
+						<li>
+							<a
+								href={face.path}
+								class="text-[var(--accent)] underline-offset-4 hover:underline"
+							>
+								{face.title}
+							</a>
+						</li>
+					))
+				}
+			</ul>
+		</section>
+
+		<section class="space-y-3 border-t border-[var(--line)] pt-8">
+			<h2 class="text-sm font-medium uppercase tracking-[0.14em] text-[var(--muted)]">
+				Elsewhere
+			</h2>
+			<ul class="flex flex-wrap gap-x-5 gap-y-2">
+				{
+					primaryContactLinks().map((link) => (
+						<li>
+							<a
+								href={link.href}
+								class="text-[var(--ink-soft)] underline-offset-4 hover:text-[var(--accent)] hover:underline"
+							>
+								{link.label}
+							</a>
+						</li>
+					))
+				}
+			</ul>
+		</section>
+	</div>
 </BaseLayout>
+
+<style>
+	.city-placeholder__mark {
+		display: block;
+		width: 2.5rem;
+		height: 2.5rem;
+		border: 1px dashed var(--line);
+		border-radius: 9999px;
+		background:
+			radial-gradient(circle at 35% 30%, var(--surface), transparent 55%),
+			var(--surface-2);
+		animation: city-pulse 4.5s ease-in-out infinite;
+	}
+
+	.city-placeholder:nth-child(2) .city-placeholder__mark {
+		animation-delay: 0.35s;
+	}
+	.city-placeholder:nth-child(3) .city-placeholder__mark {
+		animation-delay: 0.7s;
+	}
+	.city-placeholder:nth-child(4) .city-placeholder__mark {
+		animation-delay: 1.05s;
+	}
+	.city-placeholder:nth-child(5) .city-placeholder__mark {
+		animation-delay: 1.4s;
+	}
+	.city-placeholder:nth-child(6) .city-placeholder__mark {
+		animation-delay: 1.75s;
+	}
+
+	@keyframes city-pulse {
+		0%,
+		100% {
+			transform: scale(1);
+			opacity: 0.75;
+		}
+		50% {
+			transform: scale(1.06);
+			opacity: 1;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.city-placeholder__mark {
+			animation: none;
+			opacity: 1;
+		}
+	}
+</style>

@@ -2,6 +2,7 @@
 import { ClientRouter } from 'astro:transitions';
 import CubeStage from '../components/CubeStage';
 import { FACES, isFacePath } from '../lib/faces';
+import { contacts, site } from '../lib/site';
 import '../styles/global.css';
 import '../styles/cube.css';
 
@@ -12,6 +13,7 @@ interface Props {
 
 const { title, faceTitle } = Astro.props;
 const pathname = Astro.url.pathname;
+const gaId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID as string | undefined;
 ---
 
 <!doctype html>
@@ -22,12 +24,44 @@ const pathname = Astro.url.pathname;
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
+		<meta name="description" content={`${site.shortName} — ${site.tagline}`} />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600&family=Fraunces:opsz,wght@9..144,500;9..144,650&display=swap"
+			rel="stylesheet"
+		/>
 		<title>{title}</title>
 		<ClientRouter fallback="swap" />
+		{
+			gaId && (
+				<>
+					<script async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}></script>
+					<script is:inline define:vars={{ gaId }}>
+						window.dataLayer = window.dataLayer || [];
+						function gtag() {
+							dataLayer.push(arguments);
+						}
+						window.gtag = gtag;
+						gtag('js', new Date());
+						gtag('config', gaId, { send_page_view: false });
+
+						document.addEventListener('astro:page-load', () => {
+							gtag('event', 'page_view', {
+								page_title: document.title,
+								page_location: location.href,
+							});
+						});
+					</script>
+				</>
+			)
+		}
 	</head>
-	<body class="min-h-dvh bg-neutral-50 text-neutral-900 antialiased">
-		<header class="relative z-20 border-b border-neutral-200 bg-neutral-50">
+	<body class="flex min-h-dvh flex-col text-[var(--ink)] antialiased">
+		<header class="relative z-20 border-b border-[var(--line)]/80 bg-[var(--surface)]/70 backdrop-blur-sm">
 			<nav class="mx-auto flex max-w-5xl flex-wrap items-center gap-x-6 gap-y-2 px-4 py-4" aria-label="Cube faces">
+				<a href="/" class="font-display text-lg tracking-tight text-[var(--ink)]">{site.name}</a>
+				<span class="hidden h-4 w-px bg-[var(--line)] sm:block" aria-hidden="true"></span>
 				{
 					FACES.map((face) => (
 						<a
@@ -36,8 +70,8 @@ const pathname = Astro.url.pathname;
 							class:list={[
 								'text-sm tracking-wide transition-colors',
 								isFacePath(pathname, face.path)
-									? 'font-semibold text-neutral-900'
-									: 'text-neutral-500 hover:text-neutral-800',
+									? 'font-semibold text-[var(--ink)]'
+									: 'text-[var(--muted)] hover:text-[var(--ink)]',
 							]}
 						>
 							{face.navLabel}
@@ -46,14 +80,24 @@ const pathname = Astro.url.pathname;
 				}
 			</nav>
 		</header>
-		<main class="mx-auto max-w-5xl px-4 py-12" transition:animate="none">
+		<main class="mx-auto w-full max-w-5xl flex-1 px-4 py-12" transition:animate="none">
 			<CubeStage client:load pathname={pathname} faceTitle={faceTitle}>
 				<slot />
 			</CubeStage>
 		</main>
+		<footer class="relative z-20 border-t border-[var(--line)]/80">
+			<div class="mx-auto flex max-w-5xl justify-end px-4 py-4">
+				<a
+					href={contacts.buyMeACoffee}
+					target="_blank"
+					rel="noopener noreferrer"
+					class="font-display text-sm font-medium tracking-wide text-[#5c2e0a] transition-colors hover:text-[#3d1c04]"
+				>
+					buy me a <s class="decoration-[#5c2e0a]">Coffee</s> HotChocolate
+				</a>
+			</div>
+		</footer>
 		<script>
-			// Flag in-app navigations so CubeStage can animate from the prior face
-			// instead of spinning in on deep links / hard loads.
 			document.addEventListener('astro:before-preparation', () => {
 				try {
 					sessionStorage.setItem('cube-nav', '1');

@@ -1,0 +1,13 @@
+---
+import ProjectDetail from '../../components/ProjectDetail.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getProjectBySlug } from '../../lib/projects';
+import { site } from '../../lib/site';
+
+const project = getProjectBySlug('sf-almanac');
+if (!project) throw new Error('Missing sf-almanac project');
+---
+
+<BaseLayout title={`${site.name} — ${project.title}`} faceTitle={project.title}>
+	<ProjectDetail project={project} />
+</BaseLayout>

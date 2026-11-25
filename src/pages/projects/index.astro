@@ -1,7 +1,103 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getProjectsSorted, STATUS_LABEL } from '../../lib/projects';
+import { site } from '../../lib/site';
+
+const list = getProjectsSorted();
 ---
 
-<BaseLayout title="Sides of Nav — The Analyst & Builder" faceTitle="The Analyst & Builder">
-	<p class="mt-3 text-neutral-600">Technical & Data Projects</p>
+<BaseLayout title={`${site.name} — Projects`} faceTitle="The Analyst & Builder">
+	<div class="mt-4 space-y-8">
+		<p class="max-w-2xl text-[var(--ink-soft)]">
+			Pipeline of work with artifacts — live demos first, then builds in motion.
+		</p>
+
+		<ul class="divide-y divide-[var(--line)] border-y border-[var(--line)]">
+			{
+				list.map((project) => {
+					const detailHref = `/projects/${project.slug}`;
+					const isLive = project.status === 'live';
+					return (
+						<li class="py-5">
+							<div class="space-y-3">
+								<div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+									<a
+										href={detailHref}
+										class="font-display text-xl tracking-tight text-[var(--ink)] transition-colors hover:text-[var(--accent)]"
+									>
+										{project.title}
+									</a>
+									<span class="inline-flex items-center gap-1.5 text-xs uppercase tracking-[0.14em] text-[var(--muted)]">
+										{STATUS_LABEL[project.status]}
+										<span
+											class:list={[
+												'status-dot',
+												isLive ? 'status-dot--live' : 'status-dot--building',
+											]}
+											aria-hidden="true"
+										/>
+									</span>
+								</div>
+								<p class="max-w-2xl text-[var(--ink-soft)]">{project.oneLiner}</p>
+								<div class="flex flex-wrap items-center gap-x-5 gap-y-2 pt-1">
+									{project.demoUrl && (
+										<a
+											href={project.demoUrl}
+											target="_blank"
+											rel="noopener noreferrer"
+											class="inline-flex items-center gap-1 text-sm font-medium text-[var(--link)] underline-offset-4 hover:underline"
+										>
+											Visit
+											<svg
+												class="size-3.5 shrink-0"
+												viewBox="0 0 16 16"
+												fill="none"
+												aria-hidden="true"
+											>
+												<path
+													d="M4.5 11.5 11.5 4.5M7 4.5h4.5V9"
+													stroke="currentColor"
+													stroke-width="1.6"
+													stroke-linecap="round"
+													stroke-linejoin="round"
+												/>
+											</svg>
+											<span class="sr-only">(opens in a new tab)</span>
+										</a>
+									)}
+									<a
+										href={detailHref}
+										class="text-sm font-medium text-[var(--ink-soft)] underline-offset-4 hover:text-[var(--accent)] hover:underline"
+									>
+										Learn more
+									</a>
+								</div>
+							</div>
+						</li>
+					);
+				})
+			}
+		</ul>
+	</div>
 </BaseLayout>
+
+<style>
+	.status-dot {
+		display: inline-block;
+		width: 0.55rem;
+		height: 0.55rem;
+		border-radius: 9999px;
+		flex-shrink: 0;
+		translate: 0 -0.05em;
+	}
+
+	.status-dot--live {
+		background: #22a06b;
+		box-shadow: 0 0 0 3px rgba(34, 160, 107, 0.18);
+	}
+
+	.status-dot--building {
+		background: #e0b400;
+		box-shadow: 0 0 0 3px rgba(224, 180, 0, 0.2);
+	}
+</style>
