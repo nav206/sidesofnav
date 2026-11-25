@@ -3,6 +3,7 @@
 	"name": "sidesofnav",
 	"compatibility_date": "2026-10-19",
 	// Static Astro HTML/CSS/JS (Cloudflare adapter output).
+	"pages_build_output_dir": "./dist/client",
 	"assets": {
 		"directory": "./dist/client",
 		"not_found_handling": "404-page"

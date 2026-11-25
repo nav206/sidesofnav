@@ -17,6 +17,11 @@ async function exists(file) {
 	}
 }
 
+/** Prefer PR head branch, then push ref; local runs target production (`master`). */
+function deployBranch() {
+	return process.env.GITHUB_HEAD_REF || process.env.GITHUB_REF_NAME || 'master';
+}
+
 async function run() {
 	if (await exists(deployRedirect)) {
 		await rm(deployRedirect, { force: true });
@@ -28,6 +33,8 @@ async function run() {
 		moved = true;
 	}
 
+	const branch = deployBranch();
+
 	try {
 		const code = await new Promise((resolve) => {
 			const child = spawn(
@@ -38,8 +45,7 @@ async function run() {
 					'deploy',
 					'dist/client',
 					'--project-name=sidesofnav',
-					// Always update production URL (sidesofnav.pages.dev), not a preview alias.
-					'--branch=master',
+					`--branch=${branch}`,
 					'--commit-dirty=true',
 				],
 				{ stdio: 'inherit', shell: true, cwd: root },
